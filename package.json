@@ -1,0 +1,20 @@
+{
+  "name": "my-blog",
+  "version": "1.0.0",
+  "description": "about me",
+  "main": "index.html",
+  "scripts": {
+    "start": "npm run lite",
+    "test": "test",
+    "lite": "lite-server"
+  },
+  "author": "Josué Godínez",
+  "license": "ISC",
+  "devDependencies": {
+    "lite-server": "^2.5.4"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.14.0",
+    "font-awesome": "^4.7.0"
+  }
+}

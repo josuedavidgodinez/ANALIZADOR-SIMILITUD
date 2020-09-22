@@ -16,5 +16,14 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.14.0",
     "font-awesome": "^4.7.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/josuedavidgodinez/ANALIZADOR-SIMILITUD.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/josuedavidgodinez/ANALIZADOR-SIMILITUD/issues"
+  },
+  "homepage": "https://github.com/josuedavidgodinez/ANALIZADOR-SIMILITUD#readme"
 }

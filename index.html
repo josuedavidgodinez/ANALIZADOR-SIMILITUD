@@ -54,8 +54,8 @@
     <div class="container">
         <div class="row row-content">
            
-            <div class="col-12 col-md-9">
-                <form>
+            <div class="col-12 col-md-9 center">
+                <form >
                     <div class="form-group row">
                         <!--PARA USAR FORMULARIOS USAR PRIMERO FORM LUEGO FORM-GROUP PARA CADA CAMPO A LLENAR-->
                         <label for="firstname" class="col-md-2 col-form-label"> Nombre Completo</label>
@@ -84,48 +84,40 @@
 
                     </div>
 
-                    <div class="form-group col-12">
-                        
-
+                    <div class="form-group col-12">                        
                         <div class="row">
-                            <div class="col-12 col-lg-6">
-                                <div class="input-group">
-                                    <label class="input-group-btn">
-                                        <span class="btn btn-primary btn-file">
-                                            Imagen Uno <input onchange="loadImage(event,'imagen1')"
-                                                accept=".jpg,.png,.jpeg,.gif" type="file"
-                                                >
-                                        </span>
-    
-                                    </label>
-                                    <img id="imagen1" class="img-fluid" alt="imagen1-al" style="max-height: 800px;">
-    
+                            <div class="col-12 col-lg-6" style="padding-left:0 !important;">
+                                <div style="padding-left:20%;">
+                                    <p class="h5" style="display: block;">Imagen 1</p>
+                                    <input id="img1" onchange="loadImage(event,'imagen1')"
+                                        accept=".jpg,.png,.jpeg,.gif" type="file" style="display: none;" > 
+                                    <label class="btn btn-primary" for="img1">
+                                       Seleccionar
+                                    </label>                                                                                                                                                                   
                                 </div>
+                                <img id="imagen1" class="img-fluid adjust" alt="" style="max-height: 800px;">
                             </div>
-                            <div class="col-12 col-lg-6">
-                                <div class="input-group ">
-                                    <label class="input-group-btn ">
-                                        <span class="btn btn-primary btn-file">
-                                            Imagen Dos <input onchange="loadImage(event,'imagen2')"
-                                                accept=".jpg,.png,.jpeg,.gif"  type="file"
-                                                >
-                                        </span>
-    
-                                    </label>
-                                    <img id="imagen2" class="img-fluid" alt="imagen2-al" style="max-height: 800px;">
-    
+                            <div class="col-12 col-lg-6" style="padding-left:0 !important;">
+                                <div>
+                                    <p class="h5" style="display: block;">Imagen 2</p>                                
+                                    <input onchange="loadImage(event,'imagen2')"
+                                                accept=".jpg,.png,.jpeg,.gif"  type="file"                                                    
+                                                id="img2" style="display: none;">
+                                     <label class="btn btn-primary"for="img2">
+                                        Selecionar                                                                                                                     
+                                     </label>                                    
                                 </div>
+                                <img id="imagen2" class="img-fluid adjust" alt="" style="max-height: 800px;">
                             </div>
                             
                             
                         </div>
 
-
                         <div class="form-group row">
-                            <div class="offset-md-2 col-md-10">
-                                <a onclick="predict()" class="btn btn-primary">
+                            <div class="offset-md-2 col-md-10" style="padding-left:9%;">
+                                <button type="submit" onclick="predict()" class="btn btn-primary">
                                     Analizador similitud
-                                </a>
+                                </button>
                             </div>
                         </div>
 

@@ -19,3 +19,9 @@
     min-height: 400px; 
   }
 
+  .center {
+    margin-left:22%;    
+  }
+  .adjust {
+    display: inline-block;
+  }

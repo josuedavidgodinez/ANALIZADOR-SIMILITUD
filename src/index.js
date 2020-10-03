@@ -1,4 +1,3 @@
-var imagenes = Array();
 var imagen1;
 var imagen2;
 
@@ -27,17 +26,24 @@ async function loadImage(event, destino) {
 
 async function predict(event) {
   event.preventDefault();
-  var face1 = imagen1[0].faceId;
-  var face2 = imagen2[0].faceId;
+
+  var face1;
+  var face2;
 
   var son_identicos;
   var porcentaje_parecido;
-  var return_from_verify = await call_api_for_verify(face1, face2);
+  var return_from_verify;
 
-  son_identicos = return_from_verify.isIdentical;
-  porcentaje_parecido = return_from_verify.confidence;
 
-  son_identicos ? alert("¡Son idéntidos! por un porcentaje de " + porcentaje_parecido) : alert(" No se parecen mucho, por un porcentaje de " + porcentaje_parecido)
+
+  (imagen1.length == 0 || imagen2.length == 0) ? alert("porfavor suba dos imagenes de caras de personas") : (
+    face1 = imagen1[0].faceId,
+    face2 = imagen2[0].faceId,
+    return_from_verify = await call_api_for_verify(face1, face2),
+    son_identicos = return_from_verify.isIdentical,
+    porcentaje_parecido = return_from_verify.confidence,
+    son_identicos ? alert("¡Son idéntidos! por un porcentaje de " + porcentaje_parecido) : alert(" No se parecen mucho, por un porcentaje de " + porcentaje_parecido)
+  );
 
 
 

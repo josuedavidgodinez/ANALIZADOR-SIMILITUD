@@ -24,7 +24,6 @@ function makeblob(b64Data, contentType, sliceSize) {
     return blob;
 }
  function analyze(file) {
-
     return new Promise((resolve, reject) => {
         let reader = new FileReader();
         reader.readAsDataURL(file);
@@ -32,16 +31,10 @@ function makeblob(b64Data, contentType, sliceSize) {
             var resultData = this.result;            
             resultData = resultData.split(',')[1];
             let image_promise = await processImage(resultData);       
-           resolve(image_promise);
+            resolve(image_promise);
         };
-    
         reader.onerror = reject;
-    
-        
       });
-   
-
-
 }
 
 
@@ -62,21 +55,16 @@ async function processImage(binaryImage) {    //    // Request parameters.
         type: "POST",
         beforeSend: function (xhrObj) {
             xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "1113e698f4574f19af28cb44de439789");
-
-
         },
         contentType: "application/octet-stream",
         mime: "application/octet-stream",
         data: makeblob(binaryImage, 'image/jpeg'),
         cache: false,
         processData: false
-
-
     }).done(function (data) {
         // Show formatted JSON on webpage.
         data;
     });
-
     console.log(resultado);
     return resultado;
 }

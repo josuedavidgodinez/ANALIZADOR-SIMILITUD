@@ -65,6 +65,5 @@ async function processImage(binaryImage) {    //    // Request parameters.
         // Show formatted JSON on webpage.
         data;
     });
-    console.log(resultado);
     return resultado;
 }

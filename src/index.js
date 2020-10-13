@@ -6,7 +6,6 @@ var img2Lista = false;
 async function loadImage(event, destino) {
   archivo = event.target.files[0];
   var myURL = window.URL || window.webkitURL
-  console.log('winurl=' + myURL);
   if(archivo.type.startsWith("image")){
     var image = document.getElementById(destino);
     let source = myURL.createObjectURL(archivo);
@@ -42,7 +41,7 @@ async function predict(event) {
     res_mess = porcentaje_parecido * 100,
     res_mess = res_mess.toFixed(2),
     res_mess = res_mess.toString() + "%",
-    son_identicos ? alert("¡Son idéntidos! por un porcentaje de " + res_mess) : alert(" No se parecen mucho, por un porcentaje de " + res_mess)
+    son_identicos ? alert('¡Son idéntidos!') : alert('Parentesco: ' + getParentesco(porcentaje_parecido) + '\nPorcentaje de Similitud: ' + res_mess)
   );
 }
 
@@ -62,7 +61,6 @@ async function call_api_for_verify(faceid1, faceid2) {
     // Show formatted JSON on webpage.
     data;
   });
-  console.log(resultado);
   return resultado;
 }
 
@@ -92,4 +90,13 @@ function verifImg2Handler (){
       clearInterval(verifImg2);
     }
   }
+}
+
+function getParentesco(porcentaje){
+  if(porcentaje < .20) return 'Ninguno';
+  if(porcentaje < .40) return 'Primos Lejanos';
+  if(porcentaje < .60) return 'Primos/Tios';
+  if(porcentaje < .80) return 'Hemanos';
+  if(porcentaje < .90) return 'Papá/Mamá e hijos';
+  return 'Misma Persona';
 }

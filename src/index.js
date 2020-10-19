@@ -8,16 +8,17 @@ async function loadImage(event, destino) {
   var myURL = window.URL || window.webkitURL
   if(archivo.type.startsWith("image")){
     var image = document.getElementById(destino);
-    let source = myURL.createObjectURL(archivo);
-    image.src = source;
-    destino == 'imagen1'? (
+    let source = myURL.createObjectURL(archivo);    
+    destino == 'imagen1'? (ShowSpinner('spinner1'),
       imagen1 = null,
       imagen1 = await analyze(archivo),
-      verifImg1 = setInterval(verifImg1Handler,100)
-    ) : (
+      verifImg1 = setInterval(verifImg1Handler,100),HideSpinner('spinner1'),
+      image.src = source
+    ) : (ShowSpinner('spinner2'),
       imagen2 = null,
       imagen2 = await analyze(archivo),
-      verifImg2 = setInterval(verifImg2Handler,100)
+      verifImg2 = setInterval(verifImg2Handler,100),HideSpinner('spinner2'),
+      image.src = source
     );
   }else{
     alert("Seleccione una imagen");
@@ -25,6 +26,7 @@ async function loadImage(event, destino) {
 };
 
 async function predict(event) {
+  ShowSpinner('GIF');
   event.preventDefault();
   var face1;
   var face2;
@@ -41,7 +43,8 @@ async function predict(event) {
     res_mess = porcentaje_parecido * 100,
     res_mess = res_mess.toFixed(2),
     res_mess = res_mess.toString() + "%",
-    son_identicos ? alert('¡Son idéntidos!') : alert('Parentesco: ' + getParentesco(porcentaje_parecido) + '\nPorcentaje de Similitud: ' + res_mess)
+    await sleep(3000),HideSpinner('GIF'),
+    son_identicos ? alert('¡Son idénticos!') : alert('Parentesco: ' + getParentesco(porcentaje_parecido) + '\nPorcentaje de Similitud: ' + res_mess)
   );
 }
 
@@ -99,4 +102,16 @@ function getParentesco(porcentaje){
   if(porcentaje < .80) return 'Hemanos';
   if(porcentaje < .90) return 'Papá/Mamá e hijos';
   return 'Misma Persona';
+}
+
+function HideSpinner(id){
+  document.getElementById(id) 
+  .style.display = 'none';
+}
+function ShowSpinner(id){
+  document.getElementById(id) 
+  .style.display = 'block';
+}
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }

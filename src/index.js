@@ -6,9 +6,96 @@ var archivo1;
 var archivo2;
 var porcentaje;
 var parentesco;
+var inLoad = false;
 imagen11 = new Array();
 imagen22= new Array();
+var $stream;
+var $video1, $video2, $canvas1, $canvas2;
+window.onload = function() {
+  $video1 = document.getElementById('video1'),
+$video2 = document.getElementById('video2'),
+$canvas1 = document.getElementById('canvas1'),
+$canvas2 = document.getElementById('canvas2');
+}
 
+const tieneSoporteUserMedia = () =>
+    !!(navigator.getUserMedia || (navigator.mozGetUserMedia || navigator.mediaDevices.getUserMedia) || navigator.webkitGetUserMedia || navigator.msGetUserMedia)
+const _getUserMedia = (...arguments) =>
+    (navigator.getUserMedia || (navigator.mozGetUserMedia || navigator.mediaDevices.getUserMedia) || navigator.webkitGetUserMedia || navigator.msGetUserMedia).apply(navigator, arguments);
+    
+    const obtenerDispositivos = () => navigator
+    .mediaDevices
+    .enumerateDevices();
+    const mostrarStream = idDeDispositivo => {
+      _getUserMedia({
+              video: {
+                  // Justo aquí indicamos cuál dispositivo usar
+                  deviceId: idDeDispositivo,
+              }
+          },
+          (streamObtenido) => {
+            stream = streamObtenido;             
+              $video1.style.display = 'block';
+              $video1.srcObject = stream;
+              $video1.play();                     
+          }, (error) => {
+            console.log("Permiso denegado o error: ", error);
+            $estado.innerHTML = "No se puede acceder a la cámara, o no diste permiso.";
+        });
+        }
+
+function camera(){ 
+  if(!inLoad){  
+    if (!tieneSoporteUserMedia()) {
+      alert("Lo siento. Tu navegador no soporta esta característica");
+      $estado.innerHTML = "Parece que tu navegador no soporta esta característica. Intenta actualizarlo.";
+      return;
+    }    
+    obtenerDispositivos()
+        .then(dispositivos => {
+            // Vamos a filtrarlos y guardar aquí los de vídeo
+            const dispositivosDeVideo = [];
+
+            // Recorrer y filtrar
+            dispositivos.forEach(function(dispositivo) {
+                const tipo = dispositivo.kind;
+                if (tipo === "videoinput") {
+                    dispositivosDeVideo.push(dispositivo);
+                }
+            });
+
+            // Vemos si encontramos algún dispositivo, y en caso de que si, entonces llamamos a la función
+            // y le pasamos el id de dispositivo
+            if (dispositivosDeVideo.length > 0) {
+                // Mostrar stream con el ID del primer dispositivo, luego el usuario puede cambiar
+                mostrarStream(dispositivosDeVideo[0].deviceId);
+            }
+        });
+    inLoad = true;
+    alert("vuelva a presionar el botón de cámara para tomar la foto");
+  }else{
+    //Pausar reproducción
+    $video1.pause();
+
+    //Obtener contexto del canvas y dibujar sobre él
+    let contexto = $canvas1.getContext("2d");
+    $canvas1.width = $video1.videoWidth;
+    $canvas1.height = $video1.videoHeight;
+    contexto.drawImage($video1, 0, 0, $canvas1.width, $canvas1.height);
+
+    let foto = $canvas1.toDataURL(); //Esta es la foto, en base 64
+
+    let enlace = document.createElement('a'); // Crear un <a>
+    enlace.download = "foto_analisis.png";
+    enlace.href = foto;
+    $video1.style.display = 'none';    
+    inLoad = false;
+    vidOff();
+    alert("Después de descargar la imagen, podrás subirla para análisis"); 
+    enlace.click();
+    //Reanudar reproducción    
+  }
+}
 async function loadImage(event, destino) {
   archivo = event.target.files[0];
   var myURL = window.URL || window.webkitURL
@@ -36,7 +123,10 @@ async function loadImage(event, destino) {
 };
 
 async function predict(event) {
-  ShowSpinner('GIF');
+  document.getElementById('imagen1').src = '';
+  document.getElementById('imagen2').src = '';
+  ShowSpinner('analisis');
+  ShowSpinner('GIF');  
   event.preventDefault();
   var face1;
   var face2;
@@ -44,7 +134,7 @@ async function predict(event) {
   var porcentaje_parecido;
   var return_from_verify;
 
-  (!img1Lista || !imagen2) ? alert("porfavor suba dos imagenes de caras de personas") : (
+  (!img1Lista || !imagen2) ? alert("por favor suba dos imagenes de caras de personas") : (
     face1 = imagen1[0].faceId,
     face2 = imagen2[0].faceId,
     return_from_verify = await call_api_for_verify(face1, face2),
@@ -53,7 +143,7 @@ async function predict(event) {
     res_mess = porcentaje_parecido * 100,
     res_mess = res_mess.toFixed(2),
     res_mess = res_mess.toString() + "%",
-    await sleep(3000),HideSpinner('GIF'),
+    await sleep(3000),HideSpinner('GIF'),HideSpinner('analisis'),
     porcentaje = res_mess,
     parentesco = getParentesco(porcentaje_parecido),
     son_identicos ? alert('¡Son idénticos!') : alert('Parentesco: ' + getParentesco(porcentaje_parecido) + '\nPorcentaje de Similitud: ' + res_mess)
@@ -168,4 +258,10 @@ function mandarCorreo(){
     
   });
 
+}
+
+function vidOff() {  
+  var media = $video1.srcObject;
+  var tracks = media.getTracks();
+  tracks.forEach(track => track.stop());  
 }

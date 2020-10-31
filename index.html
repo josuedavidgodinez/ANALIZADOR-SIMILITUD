@@ -1,5 +1,12 @@
 <html>
 <head>
+    <style>
+		@media only screen and (max-width: 700px) {
+			video {
+				max-width: 100%;
+			}
+		}
+	</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
@@ -20,7 +27,9 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>    
     <script type="text/javascript" src="src/index.js"></script>
     <script type="text/javascript" src="src/read_image_module.js"></script>
-    <title>Comparador de Imágenes</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <title>Analizador de Similitud</title>
 </head>
 <body>
     <div id="main">
@@ -43,34 +52,52 @@
             <div class="col-12 col-md-9 center">
                 <form enctype="multipart/form-data"  method="post" id="uploadForm">
                     <div class="form-group col-12">
-                        <div class="row">
-                            <div class="col-12 col-lg-6" style="padding-left:0 !important;">
+                        <div class="row" id="content">
+                            <div class="col-12 col-lg-6" style="padding-left:0 !important; display: inline-block;">
                                 <div style="padding-left:20%;">
-                                    <p class="h5" style="display: block;">Imagen 1</p>
+                                    <p class="h5" style="display: inline-block;">Imagen 1</p>
                                     <input id="img1" onchange="loadImage(event,'imagen1')"
                                         accept=".jpg,.png,.jpeg,.gif" type="file" style="display: none;" name="img1">
                                     <label class="btn btn-primary" for="img1">
                                         Seleccionar
-                                    </label>                                  
+                                    </label>
+                                    <input id="cam1" onclick="camera()"
+                                       type="button" style="display: none;">
+                                    <label class="btn btn-primary" for="cam1" title="cámara">
+                                        <span class="material-icons">
+                                            camera
+                                            </span>
+                                    </label>                                                                                                      
                                 </div>
                                 <div class="spinner-border text-primary center" style="display:none;" 
                                 id="spinner1"role="status">                                
                                 </div>
+                                <video muted="muted" id="video1" style="display: none;"></video>
+	                            <canvas id="canvas1" style="display: none;"></canvas>
                                 <img id="imagen1" class="img-fluid adjust" alt="" style="max-height: 800px;">
                             </div>
                             <div class="col-12 col-lg-6" style="padding-left:0 !important;">
                                 <div>
-                                    <p class="h5" style="display: block;">Imagen 2</p>
+                                    <p class="h5" style="display: inline-block;">Imagen 2</p>
                                     <input onchange="loadImage(event,'imagen2')" accept=".jpg,.png,.jpeg,.gif"
                                         type="file" id="img2" style="display: none;">
                                     <label class="btn btn-primary" for="img2">
                                         Selecionar
+                                    </label>
+                                    <input onclick="camera()"
+                                        type="button" id="cam2" style="display: none;">
+                                    <label class="btn btn-primary" for="cam2" title="cámara">
+                                        <span class="material-icons">
+                                            camera
+                                            </span>
                                     </label>
                                 </div>
                                 <div class="spinner-border text-primary center"  style="display:none;"
                                 id="spinner2" role="status">                                
                                 </div>
                                 <img id="imagen2" class="img-fluid adjust" alt="" style="max-height: 800px;">
+                                <video id="video2" muted="muted"  style="display: none;"></video>
+	                            <canvas id="canvas2" style="display: none;"></canvas>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -79,11 +106,14 @@
                                 <button type="submit" onclick="predict(event)" class="btn btn-primary">
                                     Analizador Similitud
                                 </button>
-                            </div>
-                            <div id="GIF" style="display:none;">
-                                <iframe  src="https://giphy.com/embed/3o85xluSS9Tw1auAP6" width="480" height="360" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
-                            </div>                            
+                            </div>                                                       
                         </div>
+                        <div id = 'analisis' style="display: none;">
+                            <h2>Analizando...</h2>
+                        </div>
+                        <div id="GIF" style="display:none;">
+                            <iframe  src="https://giphy.com/embed/3o85xluSS9Tw1auAP6" width="480" height="360" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+                        </div> 
                     </div>
                     <div class="form-group row">
                         <div class="col-md-6 offset-md-2">
@@ -114,8 +144,8 @@
                     
                 </form>
             </div>
-            <button onclick="mandarCorreo();" class="btn btn-primary" disabled id="enviar_correo">
-                ENVIAR CORREO
+            <button onclick="mandarCorreo();" class="btn btn-primary" disabled id="enviar_correo"  style="margin-left:45%;">
+                Enviar Correo
             </button>
         </div>
     </div>

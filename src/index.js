@@ -2,6 +2,12 @@ var imagen1;
 var imagen2;
 var img1Lista = false;
 var img2Lista = false;
+var archivo1;
+var archivo2;
+var porcentaje;
+var parentesco;
+imagen11 = new Array();
+imagen22= new Array();
 
 async function loadImage(event, destino) {
   archivo = event.target.files[0];
@@ -13,12 +19,16 @@ async function loadImage(event, destino) {
       imagen1 = null,
       imagen1 = await analyze(archivo),
       verifImg1 = setInterval(verifImg1Handler,100),HideSpinner('spinner1'),
-      image.src = source
+      image.src = source,
+      archivo1=archivo,
+      imagen11 = event.target.files
     ) : (ShowSpinner('spinner2'),
       imagen2 = null,
       imagen2 = await analyze(archivo),
       verifImg2 = setInterval(verifImg2Handler,100),HideSpinner('spinner2'),
-      image.src = source
+      image.src = source,
+      archivo2=archivo,
+      archivo22 = event.target.files
     );
   }else{
     alert("Seleccione una imagen");
@@ -44,18 +54,20 @@ async function predict(event) {
     res_mess = res_mess.toFixed(2),
     res_mess = res_mess.toString() + "%",
     await sleep(3000),HideSpinner('GIF'),
+    porcentaje = res_mess,
+    parentesco = getParentesco(porcentaje_parecido),
     son_identicos ? alert('¡Son idénticos!') : alert('Parentesco: ' + getParentesco(porcentaje_parecido) + '\nPorcentaje de Similitud: ' + res_mess)
   );
 }
 
 async function call_api_for_verify(faceid1, faceid2) {
   var resultado = await $.ajax({
-    url: "https://2dociclourl2020.cognitiveservices.azure.com/face/v1.0/verify",
+    url: "https://proyectoadmin.cognitiveservices.azure.com/face/v1.0/verify",
 
     method: "POST",
     type: "POST",
     beforeSend: function (xhrObj) {
-      xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "1113e698f4574f19af28cb44de439789");
+      xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "27d5999361474b23bc1d0f6dbdbbd424");
     },
     contentType: "application/json",
     data: '{"faceId1": ' + '"' + faceid1 + '","faceId2": ' + '"' + faceid2 + '"}',
@@ -114,4 +126,46 @@ function ShowSpinner(id){
 }
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+const getBase64OfFile = (file, callback) => {
+  const fr = new FileReader();
+  fr.addEventListener('load', (e) => {
+    if(typeof callback === 'function') {
+      callback(fr.result.split('base64,')[1]);
+    }
+  });
+  fr.readAsDataURL(file);
+}
+
+function mandarCorreo(){
+
+  const file = archivo1;
+  const file1 = archivo2;
+    file && getBase64OfFile(file, (data) => {
+      file1 && getBase64OfFile(file1, (data1) => {
+        $.ajax({
+          url: "http://localhost:8000/EnviarSolicitudes",    
+          data: {
+                 imgdata:data,
+                 imgdata1:data1,
+                 email:$("#email").val(),
+                 firstname:$("#firstname").val(),
+                 porcentaje:porcentaje,
+                 parentesco:parentesco
+               },
+          type: 'post',
+          success: function (response) {   
+                   console.log(response);
+             //$('#image_id img').attr('src', response);
+          }
+        });
+      
+    });
+  
+   
+    
+  });
+
 }

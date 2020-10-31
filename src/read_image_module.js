@@ -49,12 +49,12 @@ async function processImage(binaryImage) {    //    // Request parameters.
     };
 
     var resultado = await $.ajax({
-        url: "https://2dociclourl2020.cognitiveservices.azure.com/face/v1.0/detect?" + $.param(params),
+        url: "https://proyectoadmin.cognitiveservices.azure.com/face/v1.0/detect?" + $.param(params),
 
         method: "POST",
         type: "POST",
         beforeSend: function (xhrObj) {
-            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "1113e698f4574f19af28cb44de439789");
+            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "27d5999361474b23bc1d0f6dbdbbd424");
         },
         contentType: "application/octet-stream",
         mime: "application/octet-stream",

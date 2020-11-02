@@ -123,8 +123,6 @@ async function loadImage(event, destino) {
 };
 
 async function predict(event) {
-  document.getElementById('imagen1').src = '';
-  document.getElementById('imagen2').src = '';
   ShowSpinner('analisis');
   ShowSpinner('GIF');  
   event.preventDefault();

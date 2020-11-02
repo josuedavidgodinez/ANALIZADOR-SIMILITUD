@@ -13,9 +13,9 @@ var $stream;
 var $video1, $video2, $canvas1, $canvas2;
 window.onload = function() {
   $video1 = document.getElementById('video1'),
-$video2 = document.getElementById('video2'),
-$canvas1 = document.getElementById('canvas1'),
-$canvas2 = document.getElementById('canvas2');
+  $video2 = document.getElementById('video2'),
+  $canvas1 = document.getElementById('canvas1'),
+  $canvas2 = document.getElementById('canvas2');
 }
 
 const tieneSoporteUserMedia = () =>
@@ -116,11 +116,15 @@ async function loadImage(event, destino,archivo_fuente) {
   var myURL = window.URL || window.webkitURL
   if(archivo.type.startsWith("image")){
     var image = document.getElementById(destino);
-    let source = myURL.createObjectURL(archivo);    
-    destino == 'imagen1'? (ShowSpinner('spinner1'),
+    console.log(image);
+    let source = myURL.createObjectURL(archivo);
+    console.log(source);
+    destino == 'imagen1'? (
+      ShowSpinner('spinner1'),
       imagen1 = null,
       imagen1 = await analyze(archivo),
-      verifImg1 = setInterval(verifImg1Handler,100),HideSpinner('spinner1'),
+      verifImg1 = setInterval(verifImg1Handler,100),
+      HideSpinner('spinner1'),
       image.src = source,
       archivo1=archivo,
       imagen11 = event.target.files,
@@ -128,7 +132,8 @@ async function loadImage(event, destino,archivo_fuente) {
     ) : (ShowSpinner('spinner2'),
       imagen2 = null,
       imagen2 = await analyze(archivo),
-      verifImg2 = setInterval(verifImg2Handler,100),HideSpinner('spinner2'),
+      verifImg2 = setInterval(verifImg2Handler,100),
+      HideSpinner('spinner2'),
       image.src = source,
       archivo2=archivo,
       archivo22 = event.target.files,
@@ -140,8 +145,6 @@ async function loadImage(event, destino,archivo_fuente) {
 };
 
 async function predict(event) {
-  ShowSpinner('analisis');
-  ShowSpinner('GIF');  
   event.preventDefault();
   var face1;
   var face2;
@@ -149,7 +152,9 @@ async function predict(event) {
   var porcentaje_parecido;
   var return_from_verify;
 
-  (!img1Lista || !imagen2) ? alert("por favor suba dos imagenes de caras de personas") : (
+  (!img1Lista || !img2Lista) ? alert('por favor suba dos imagenes de caras de personas') : (
+    ShowSpinner('analisis'),
+    ShowSpinner('GIF'),
     face1 = imagen1[0].faceId,
     face2 = imagen2[0].faceId,
     return_from_verify = await call_api_for_verify(face1, face2),
@@ -157,10 +162,12 @@ async function predict(event) {
     porcentaje_parecido = return_from_verify.confidence,
     res_mess = porcentaje_parecido * 100,
     res_mess = res_mess.toFixed(2),
-    res_mess = res_mess.toString() + "%",
-    await sleep(3000),HideSpinner('GIF'),HideSpinner('analisis'),
+    res_mess = res_mess.toString() + '%',
+    await sleep(3000),
     porcentaje = res_mess,
     parentesco = getParentesco(porcentaje_parecido),
+    HideSpinner('GIF'),
+    HideSpinner('analisis'),
     son_identicos ? alert('¡Son idénticos!') : alert('Parentesco: ' + getParentesco(porcentaje_parecido) + '\nPorcentaje de Similitud: ' + res_mess)
   );
 }
@@ -191,8 +198,16 @@ function verifImg1Handler(){
     if(imagen1 == null){
       return
     }else{
-      alert("Imagen 1 Lista");
-      img1Lista = true;
+      if(imagen1.length == 0){
+        imagen1 = null;
+        document.getElementById('imagen1').src = '';
+        alert('No se detectó un rostro en la imagen');
+        return
+      }
+      if(!img1Lista){
+        alert('Imagen 1 Lista');
+        img1Lista = true;
+      }
       clearInterval(verifImg1);
     }
   }
@@ -205,8 +220,16 @@ function verifImg2Handler (){
     if(imagen2 == null){
       return
     }else{
-      alert("Imagen 2 Lista");
-      img2Lista = true;
+      if(imagen2.length == 0){
+        imagen2 = null;
+        document.getElementById('imagen2').src = '';
+        alert('No se detectó un rostro en la imagen');
+        return
+      }
+      if(!img2Lista){
+        alert('Imagen 2 Lista');
+        img2Lista = true;
+      }
       clearInterval(verifImg2);
     }
   }
@@ -233,7 +256,6 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-
 const getBase64OfFile = (file, callback) => {
   const fr = new FileReader();
   fr.addEventListener('load', (e) => {
@@ -245,7 +267,6 @@ const getBase64OfFile = (file, callback) => {
 }
 
 function mandarCorreo(){
-
   const file = archivo1;
   const file1 = archivo2;
     file && getBase64OfFile(file, (data) => {
@@ -266,13 +287,8 @@ function mandarCorreo(){
              //$('#image_id img').attr('src', response);
           }
         });
-      
     });
-  
-   
-    
   });
-
 }
 
 function vidOff() {  

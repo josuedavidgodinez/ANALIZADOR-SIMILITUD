@@ -57,16 +57,15 @@
                                 <div style="padding-left:20%;">
                                     <p class="h5" style="display: inline-block;">Imagen 1</p>
                                     <input id="img1" onchange="loadImage(event,'imagen1')"
-                                        accept=".jpg,.png,.jpeg,.gif" type="file" style="display: none;" name="img1">
+                                        accept=".jpg,.png,.jpeg,.gif" type="file"
+                                        style="display: none;" name="img1">
                                     <label class="btn btn-primary" for="img1">
                                         Seleccionar
                                     </label>
                                     <input id="cam1" onclick="camera()"
                                        type="button" style="display: none;">
                                     <label class="btn btn-primary" for="cam1" title="cámara">
-                                        <span class="material-icons">
-                                            camera
-                                            </span>
+                                        <span class="material-icons">camera</span>
                                     </label>                                                                                                      
                                 </div>
                                 <div class="spinner-border text-primary center" style="display:none;" 
@@ -79,7 +78,8 @@
                             <div class="col-12 col-lg-6" style="padding-left:0 !important;">
                                 <div>
                                     <p class="h5" style="display: inline-block;">Imagen 2</p>
-                                    <input onchange="loadImage(event,'imagen2')" accept=".jpg,.png,.jpeg,.gif"
+                                    <input onchange="loadImage(event,'imagen2')"
+                                        accept=".jpg,.png,.jpeg,.gif"
                                         type="file" id="img2" style="display: none;">
                                     <label class="btn btn-primary" for="img2">
                                         Selecionar
@@ -87,9 +87,7 @@
                                     <input onclick="camera()"
                                         type="button" id="cam2" style="display: none;">
                                     <label class="btn btn-primary" for="cam2" title="cámara">
-                                        <span class="material-icons">
-                                            camera
-                                            </span>
+                                        <span class="material-icons">camera</span>
                                     </label>
                                 </div>
                                 <div class="spinner-border text-primary center"  style="display:none;"
@@ -101,7 +99,6 @@
                             </div>
                         </div>
                         <div class="form-group row" style="margin-top: 2rem;">
-                            
                             <div class="offset-md-2 col-md-10" style="padding-left:9.25%;">
                                 <button type="submit" onclick="predict(event)" class="btn btn-primary">
                                     Analizador Similitud

@@ -16,6 +16,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.14.0",
     "concurrently": "^5.3.0",
+    "express": "^4.17.1",
     "font-awesome": "^4.7.0",
     "html2canvas": "^1.0.0-rc.7"
   }

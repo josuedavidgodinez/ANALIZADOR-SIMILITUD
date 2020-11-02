@@ -44,7 +44,13 @@ const _getUserMedia = (...arguments) =>
         });
         }
 
-function camera(){ 
+function camera(clase){
+  var elems = document.getElementsByClassName(clase);
+  for (i = 0; i < elems.length; i++) {
+    elems[i].style.display = 'none';
+    elems[i].style.top = '100%';
+  }
+
   if(!inLoad){  
     if (!tieneSoporteUserMedia()) {
       alert("Lo siento. Tu navegador no soporta esta característica");
@@ -93,11 +99,20 @@ function camera(){
     vidOff();
     alert("Después de descargar la imagen, podrás subirla para análisis"); 
     enlace.click();
+    for (i = 0; i < elems.length; i++) {
+      elems[i].style.display = 'block';
+      
+    }
     //Reanudar reproducción    
   }
+  
+
 }
-async function loadImage(event, destino) {
-  archivo = event.target.files[0];
+async function loadImage(event, destino,archivo_fuente) {
+  archivo_fuente == null ?
+  (archivo = event.target.files[0] )
+  :(archivo=archivo_fuente);
+
   var myURL = window.URL || window.webkitURL
   if(archivo.type.startsWith("image")){
     var image = document.getElementById(destino);
@@ -108,14 +123,16 @@ async function loadImage(event, destino) {
       verifImg1 = setInterval(verifImg1Handler,100),HideSpinner('spinner1'),
       image.src = source,
       archivo1=archivo,
-      imagen11 = event.target.files
+      imagen11 = event.target.files,
+      image.style.display='none'
     ) : (ShowSpinner('spinner2'),
       imagen2 = null,
       imagen2 = await analyze(archivo),
       verifImg2 = setInterval(verifImg2Handler,100),HideSpinner('spinner2'),
       image.src = source,
       archivo2=archivo,
-      archivo22 = event.target.files
+      archivo22 = event.target.files,
+      image.style.display='none'
     );
   }else{
     alert("Seleccione una imagen");

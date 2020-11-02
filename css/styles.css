@@ -42,3 +42,18 @@ h2 {
     -webkit-transform:rotateY(180deg); /* Safari and Chrome */
     -moz-transform:rotateY(180deg); /* Firefox */
 }
+
+
+.fileinput-remove,
+.fileinput-upload{
+	display: none;
+}
+
+#uploadForm{
+  min-width: 1120px;
+}
+
+#imagenes_container{
+  min-height: 520px;
+}
+
